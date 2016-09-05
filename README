@@ -2,19 +2,19 @@ AHCG Pipeline Readme
 Min Yi
 
 ********************************************************************************************************************************
+*                                                                                                                              *
+*                                         Download and install a Virtual Box                                                   *
+*                                                                                                                              *
 ********************************************************************************************************************************
-*Download and install a Virtual Box
-********************************************************************************************************************************
-********************************************************************************************************************************
-
 -https://www.virtualbox.org/wiki/Downloads
 
-********************************************************************************************************************************
-********************************************************************************************************************************
-*Download the basespace server
-********************************************************************************************************************************
-********************************************************************************************************************************
 
+
+********************************************************************************************************************************
+*                                                                                                                              *
+*                                         Download and set up Basespace server                                                 *
+*                                                                                                                              *
+********************************************************************************************************************************
 -https://da1s119xsxmu0.cloudfront.net/sites/developer/native/nativeappsvm/BaseSpace%20Native%20App%20VM%20(phix%20only)%20v9.ova
 -Details on installing the server is found here:
    -https://developer.basespace.illumina.com/docs/content/documentation/native-apps/setup-dev-environment
@@ -24,12 +24,13 @@ Min Yi
   -Password: basespace
   -Port: 2222
 
-********************************************************************************************************************************
-********************************************************************************************************************************
-*Set up environment and run AHCG pipeline
-********************************************************************************************************************************
-********************************************************************************************************************************
 
+
+********************************************************************************************************************************
+*                                                                                                                              *
+*                                         Set up and run AHCG pipeline                                                         *
+*                                                                                                                              *
+********************************************************************************************************************************
 -Clone the respository: https://github.com/shashidhar22/ahcg_pipeline
    -use command: git clone https://github.com/shashidhar22/ahcg_pipeline.git
 
@@ -43,12 +44,17 @@ Min Yi
 
 -Download the reference genome
   -wget www.prism.gatech.edu/~sravishankar9/resources.tar.gz
-   **This resource file contains hg19 and the dbsnp vcf for hg19**
+     **This resource file contains hg19 and the dbsnp vcf for hg19**
   -Extract via: tar -xvzf www.prism.gatech.edu/~sravishankar9/resources.tar.gz
 
 -Build a BowTie Index
   -bowtie2-build -f /path/to/hg19.fa hg19
    -The above command designates that the reference is a fasta file with option "-f" and named as hg19
+
+-To make installs of tools and dependencies easier, use Linuxbrew
+  -ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+  -echo 'export PATH="$HOME/.linuxbrew/bin:$PATH"' >>~/.bash_profile
+   -Now use "brew install *toolname*" in order to easily install tools
 
 -Download and install samtools
  -Manually
@@ -111,12 +117,13 @@ Min Yi
      -o OUT_PATH, --outpath OUT_PATH
                            Path to Ouput directory
 
-********************************************************************************************************************************
-********************************************************************************************************************************
-*Git Hub Tutorial
-********************************************************************************************************************************
-********************************************************************************************************************************
 
+
+********************************************************************************************************************************
+*                                                                                                                              *
+*                                         Setting up and updating GitHub                                                       *
+*                                                                                                                              *
+********************************************************************************************************************************
 -First go and fork the original repository to personal github
 -Then update the .git/config file and add personal github information
 -Update .gitignore and place all folders that do not need to be pushed onto github
@@ -129,4 +136,29 @@ Min Yi
   -git commit -m "Description of changes"
 -Then push the changes onto github
   -git push origin master
+
+
+
+********************************************************************************************************************************
+*                                                                                                                              *
+*                                         Finding sequence of exome using bedtools                                             *
+*                                                                                                                              *
+********************************************************************************************************************************
+-Download the gene annotation file
+  -wget http://vannberg.biology.gatech.edu/data/ahcg2016/reference_genome/hg19_refGene.txt
+-Locate the BRCA1 genes
+  -grep BRCA1 hg19_refGene.txt
+-6 BRCA1 variants are found. Determine which variant is quantitatively the best
+  -Search BRCA1 at https://dnasu.org/DNASU/Home.do
+  -Select reference: HsCD00022337
+  -Click on "Reference Sequence Alignment"
+  -NM_007294 matched the reference alignment the best and was determined to be the best variant
+-Extract the exome coordinates from hg19_refGene.txt
+  -grep NM_007294 hg19_refGene.txt | cat > brca.txt
+-Use bedconverter.py to convert the text file into a bed file
+  -Usage: ./bedconverter.py -i brca.txt -o brca1.bed
+-Install bedtools
+  -brew install bedtools
+-Use bedtools to get the sequences from the reference set
+  -bedtools getfasta -s -fo results.fa -fi /path/to/hg19.fa -bed brca1.bed
 
