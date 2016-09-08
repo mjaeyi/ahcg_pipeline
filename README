@@ -162,3 +162,17 @@ Min Yi
 -Use bedtools to get the sequences from the reference set
   -bedtools getfasta -s -fo results.fa -fi /path/to/hg19.fa -bed brca1.bed
 
+
+********************************************************************************************************************************
+*                                                                                                                              *
+*                                         Extracting reads mapping to a region of interest                                     *
+*                                                                                                                              *
+********************************************************************************************************************************
+-Dowload the NA12878 HiSeq Exome dataset from GIAB FTP site
+  -ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/
+   **There are 4 bam files you need to download**
+-Use Samtools to subset the bam file to regions of interest (BRCA1)
+  -samtools view -L <bed file> -b -o <output bam file> <input bam file>
+-Use Bedtools to convert the bam file to a fastq file
+  -bedtools bamtofastq -i <bam file> -fq <fastq r1> -fq2 <fastq r2>
+
