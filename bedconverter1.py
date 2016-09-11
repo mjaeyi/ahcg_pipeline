@@ -29,7 +29,7 @@ with open(inputfile) as f:
 		aStart = start.split(',')
 		aEnd = end.split(',')
 
-		s = int(aStart[0]) + 1000
+		s = int(aStart[0]) - 1000
 		e = int(aEnd[-2]) + 1000
 
 		o.write(aGene[2] + "\t" + str(s) + "\t" + str(e) + "\t" + aGene[1] + ':' + aGene[12] + "\t" + "NA" + "\t" + aGene[3])
