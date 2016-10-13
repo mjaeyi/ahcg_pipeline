@@ -178,3 +178,37 @@ Min Yi
 -Use Bedtools to convert the bam file to a fastq file
   -bedtools bamtofastq -i <bam file> -fq <fastq r1> -fq2 <fastq r2>
 
+********************************************************************************************************************************
+*                                                                                                                              *
+*                                         Variant Quality Score Recalibration (VQSR)                                           *
+*                                                                                                                              *
+********************************************************************************************************************************
+java -jar GenomeAnalysisTK.jar \
+    -T VariantRecalibrator \
+    -R ~/ref/resources/genome/hg19.fa \
+    -input ./variants.vcf \
+    -resource:hapmap,known=false,training=true,truth=true,prior=15.0 ./lib/VQSR/hapmap_3.3.hg19.sites.vcf.gz \
+    -resource:omni,known=false,training=true,truth=true,prior=12.0 ./lib/VQSR/1000G_omni2.5.hg19.sites.vcf.gz \
+    -resource:1000G,known=false,training=true,truth=false,prior=10.0 ./lib/VQSR/1000G_phase1.snps.high_confidence.hg19.sites.vcf.gz \
+    -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 ~/ref/resources/dbsnp_138.hg19.vcf \
+    -an DP \
+    -an QD \
+    -an FS \
+    -an SOR \
+    -an MQRankSum \
+    -an ReadPosRankSum \
+    -mode SNP \
+    -tranche 100.0 -tranche 99.9 -tranche 99.0 -tranche 90.0 \
+    -recalFile recalibrate_SNP.recal \
+    -tranchesFile recalibrate_SNP.tranches
+
+
+java -jar GenomeAnalysisTK.jar \ 
+    -T ApplyRecalibration \ 
+    -R ~/ref/resources/genome/hg19.fa \ 
+    -input ./variants.vcf \ 
+    -mode SNP \ 
+    --ts_filter_level 99.0 \ 
+    -recalFile recalibrate_SNP.recal \ 
+    -tranchesFile recalibrate_SNP.tranches \ 
+    -o recalibrated_snps_raw_indels.vcf 
