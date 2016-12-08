@@ -249,6 +249,7 @@ You must also these dependency files installed:
 	--Python 3+
 		--Pymodule "click"
 		--Pymodule "PyVCF"
+	--java
 
 The instructions to run the file:
 	1) Be in the dcm/ directory
