@@ -211,4 +211,46 @@ java -jar GenomeAnalysisTK.jar \
     --ts_filter_level 99.0 \ 
     -recalFile recalibrate_SNP.recal \ 
     -tranchesFile recalibrate_SNP.tranches \ 
-    -o recalibrated_snps_raw_indels.vcf 
+    -o recalibrated_snps_raw_indels.vcf
+
+********************************************************************************************************************************
+*                                                                                                                              *
+*                                                           DCM PIPELINE                                                       *
+*                                                                                                                              *
+********************************************************************************************************************************
+To run this DCM pipeline, you must set up your directory as follows:
+
+dcm/
+	|---VQSR
+		|---Omni.vcf
+		|---Hapmap.vcf
+		|---1000G.vcf
+	|---cov.py
+	|---draw_depth.R
+	|---dcm_pipeline.sh
+	|---parse_clnsig.py
+ref/
+	|---resources
+		|---dbsnp
+			|---dbsnp_138.hg19.vcf
+		|---genome
+			|---hg19.fa
+ahcg_pipeline/
+	|---lib
+		|---GenomeAnalysisTK.jar
+
+You must also these dependency files installed:
+	--Bedtools
+	--Samtools
+	--Imagemagick
+	--R
+		--Rmodule "ggplot2"
+	--Python 2.7+
+	--Python 3+
+		--Pymodule "click"
+		--Pymodule "PyVCF"
+
+The instructions to run the file:
+	1) Be in the dcm/ directory
+	2) bash dcm_pipeline.sh /name/of/output/dir/ /path/to/patient.bam /path/to/dcm_genelist.bed /path/to/clinvar.vcf
+	3) Final patient report is generated in dcm/patient_report.pdf
