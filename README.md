@@ -229,6 +229,7 @@ dcm/
 	|---draw_depth.R
 	|---dcm_pipeline.sh
 	|---parse_clnsig.py
+	|---ahcg_pipeline.py
 ref/
 	|---resources
 		|---dbsnp
@@ -238,6 +239,20 @@ ref/
 ahcg_pipeline/
 	|---lib
 		|---GenomeAnalysisTK.jar
+		|---bowtie2-2.2.9/bowtie2
+		|---picard.jar
+		|---Trimmomatic-0.36
+			|---trimmomatic-0.36.jar
+			|---adapters
+				|---NexteraPE-PE.fa
+	|---bowtieIndex
+		|---hg19.1.bt2
+                |---hg19.2.bt2
+                |---hg19.3.bt2
+                |---hg19.4.bt2
+                |---hg19.dict
+                |---hg19.rev.1.bt2
+                |---hg19.rev.2.bt2
 
 You must also these dependency files installed:
 	--Bedtools
@@ -253,5 +268,5 @@ You must also these dependency files installed:
 
 The instructions to run the file:
 	1) Be in the dcm/ directory
-	2) bash dcm_pipeline.sh /name/of/output/dir/ /path/to/patient.bam /path/to/dcm_genelist.bed /path/to/clinvar.vcf
+	2) bash dcm_pipeline.sh /name/of/output/dir/ /path/to/read1.fq /path/to/read2.fq /path/to/dcm_genelist.bed /path/to/clinvar.vcf
 	3) Final patient report is generated in dcm/patient_report.pdf
